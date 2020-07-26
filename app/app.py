@@ -1,20 +1,30 @@
 from flask import Flask, request, jsonify, abort
+from flask_cors import CORS, cross_origin
 from dataHelper.data_Helper import *
 
 app = Flask(__name__)
+CORS(app)
+
+@app.after_request # blueprint can also be app~~
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Headers', 'Content-type, Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE')
+    return response
 
 # get json data
-@app.route('/<int:page>')
+@app.route('/universities/<int:page>', methods=['GET'])
+@cross_origin(origins='*')
 def index(page = 1):
     universities = sorted(get_all(), key = lambda i: i['name'])  # returning JSON
     # add pagination
-    offset = 20
+    offset = 50
     start = (page - 1) * offset
     end = start + offset
-
+    noPages = round(len(universities)/offset)
     return jsonify({
         "succcess": True,
         "universities": universities[start:end],
+        "pages": noPages,
         "totalUniversities": len(universities)
     }), 200
 
@@ -32,11 +42,11 @@ def get_university(search_key, page = 1):
         offset = 20
         start = (page - 1) * offset
         end = start + offset
-
+        noPages = len(matches)/offset
         return jsonify({
             "success": True,
             "totalMatches": len(matches),
-            "page": page,
+            "Pages": noPages,
             "matches": output[start:end],
             "message": "success"
         }), 200

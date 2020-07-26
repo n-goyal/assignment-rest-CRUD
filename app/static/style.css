@@ -1,6 +1,7 @@
 .wrapper {
     padding: 20px;
     width: auto;
+    height: auto;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -10,6 +11,14 @@
     overflow: hidden;
 }
 
+
+thead th { 
+    position: sticky; 
+    top: 0;
+    background-color: white;
+    margin-top: None;
+    
+}
 
 th, td {
     vertical-align: middle !important;
@@ -30,4 +39,12 @@ th, td {
 
 .pagination{
     align-items: left !important;
+}
+
+.table-responsive {
+    max-height:500px !important;
+}
+
+.btn-create{
+    float: right;
 }
