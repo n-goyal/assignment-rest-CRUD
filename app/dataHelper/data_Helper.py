@@ -36,7 +36,7 @@ def del_details(uni_name, data=jsonData):
     data = [obj for obj in data if obj['name'] != uni_name]
     y = len(data)
     deleted = False
-
+    print(x, y)
     # if matching record was found, rewrite the json
     if x != y:
         with open("universities.json","w") as jsonFile:
@@ -51,10 +51,14 @@ def del_details(uni_name, data=jsonData):
 def create_record(record):
     inserted = False
     try:
-        jsonData.append(record)
-        with open("universities.json", "w") as jsonFile:
-            json.dump(jsonData, jsonFile)
-        inserted = True
+        # check if record already present
+        if uni_details(record['name']):
+            inserted = False
+        else:
+            jsonData.append(record)
+            with open("universities.json", "w") as jsonFile:
+                json.dump(jsonData, jsonFile)
+            inserted = True
     except:
         inserted = False
     return inserted

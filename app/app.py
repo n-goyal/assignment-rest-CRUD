@@ -4,35 +4,45 @@ from dataHelper.data_Helper import *
 app = Flask(__name__)
 
 # get json data
-@app.route('/')
-def index():
-    universities = get_all()  # returning JSON
+@app.route('/<int:page>')
+def index(page = 1):
+    universities = sorted(get_all(), key = lambda i: i['name'])  # returning JSON
     # add pagination
+    offset = 20
+    start = (page - 1) * offset
+    end = start + offset
+
     return jsonify({
         "succcess": True,
-        "universities": universities,
+        "universities": universities[start:end],
         "totalUniversities": len(universities)
     }), 200
 
 # search university info: <key: Name>
-@app.route('/universities/<search_key>/get-details', methods=['GET'])
-def get_university(search_key):
+@app.route('/universities/<string:search_key>/<int:page>/get-details', methods=['GET'])
+def get_university(search_key, page = 1):
     print(search_key)
     matches = uni_details(search_key)
 
     if matches is None:
         abort(404)
-
     else:
         # add pagination
+        output = sorted(matches, key = lambda i: i['name'])  # returning JSON
+        offset = 20
+        start = (page - 1) * offset
+        end = start + offset
+
         return jsonify({
-            "success": True
-            "matches": matches
-            "totalMatches": len(matches)
+            "success": True,
+            "totalMatches": len(matches),
+            "page": page,
+            "matches": output[start:end],
+            "message": "success"
         }), 200
 
 # delete university information
-@app.route('/universities/<uni_name>/delete-record', methods=['DELETE'])
+@app.route('/universities/<string:uni_name>/delete-record', methods=['DELETE'])
 def delete_university(uni_name):
     # print(uni_name)
     result = del_details(uni_name)
@@ -56,13 +66,13 @@ def insert_record():
         return jsonify({
             "success": True,
             "createdUniversity": data,
-            "message": result
+            "message": "inserted successfully"
         }), 200
     else:
         abort(400)
 
 # update university details
-@app.route('/universities/<uni_name>/update', methods=['PUT'])
+@app.route('/universities/<string:uni_name>/update', methods=['PUT'])
 def update_details(uni_name):
     data = request.get_json()
     updated = update_record(uni_name, data)
@@ -71,7 +81,7 @@ def update_details(uni_name):
         return jsonify({
             "success": True,
             "universityInserted": data,
-            "message": "inserted successfully"
+            "message": "updated successfully"
         }), 200
     else:
         abort(400)
