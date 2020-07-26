@@ -12,13 +12,13 @@ def after_request(response):
     return response
 
 # get json data
-@app.route('/universities/<string:code>/<int:page>', methods=['GET'])
+@app.route('/universities/<int:page>', methods=['GET'])
 @cross_origin(origins='*')
 def index(page = 1, code=''):
-    if(code!=''):
-        universities = sorted(filter_all(code), key = lambda i: i['name']) # returning JSON
-    else:
-        universities = sorted(get_all(), key = lambda i: i['name'])  # returning JSON
+    # if(code!=''):
+    #     universities = filter_all(code) # returning JSON
+    # else:
+    universities = sorted(get_all(), key = lambda i: i['name'])  # returning JSON
     if(len(universities)!=0):
         # add pagination
         offset = 10

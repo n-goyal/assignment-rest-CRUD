@@ -24,7 +24,7 @@ def get_all():
 def filter_all(code):
     matches = []
     for obj in jsonData:
-        if code == obj['alpha_two_code']:
+        if obj[u'alpha_two_code'] == code:
             matches.append(obj)
     return matches
 
