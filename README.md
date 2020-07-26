@@ -1,6 +1,12 @@
 # University-CRUD
 This repository contains assignment files to implement CURD operations over a REST service
 
+# Folder Structure
+- app contains all the data, including api service and web interface
+- dataHelper contains data modification helper file
+- static consists of style sheet and javascript file for web interface
+- template contains html file of web interface
+
 # Documentation
 ## Getting started
 
@@ -12,7 +18,8 @@ API service is built using python, Flask and the web interface's backend is usin
 
 ## API: universities
 
-*To run service on your system, Please create a virtual environment and install dependencies from requirement.txt file using command ```pip install -r requirements.txt```*
+*To run service on your system, Please create a virtual environment and install dependencies from requirement.txt file using command ```pip install -r requirements.txt```*.
+*After activating the environment switch to app folder and run ```python app.py```*
 
 **Base URL:**
 ```http://127.0.0.1:5000/universities/```
