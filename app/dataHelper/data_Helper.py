@@ -23,10 +23,11 @@ def get_all():
 # GET - Search
 def uni_details(search_key):
     matches = []
+    # get matching universities
     for obj in jsonData:
         if search_key in obj['name']:
             matches.append(obj)
-    # matches = [value for key, value in data.items() if name in key]
+
     return matches
 
 # DELETE - Record
@@ -34,24 +35,35 @@ def del_details(uni_name, data=jsonData):
     x = len(data)
     data = [obj for obj in data if obj['name'] != uni_name]
     y = len(data)
+    deleted = False
+
+    # if matching record was found, rewrite the json
     if x != y:
-        # data = json.dumps(cleanData)
         with open("universities.json","w") as jsonFile:
             json.dump(data, jsonFile)
-        return 'Success'
+        deleted = True
     else:
-        return 'No record was found'
+        deleted = False
+
+    return deleted
 
 # CREATE - Record
 def create_record(record):
-    jsonData.append(record)
-    with open("universities.json", "w") as jsonFile:
-        json.dump(jsonData, jsonFile)
-    return 'Inserted Successfully'
+    inserted = False
+    try:
+        jsonData.append(record)
+        with open("universities.json", "w") as jsonFile:
+            json.dump(jsonData, jsonFile)
+        inserted = True
+    except:
+        inserted = False
+    return inserted
+
 
 # UPDATE - Record
 def update_record(uni_name, data):
-        # update any matching articles
+    # update any matching articles
+    updated = False
     for obj in jsonData:
         if obj['name'] == uni_name:
             obj['alpha_two_code'] = data['alpha_two_code']
@@ -59,13 +71,15 @@ def update_record(uni_name, data):
             obj['domain'] = data['domain']
             obj['name'] = data['name']
             obj['web_page'] = data['web_page']
+            updated = True
             break
-
-    # rewrite the whole JSON file with updated dictionary
-    with open("universities.json", "w") as jsonFile:
-        json.dump(jsonData, jsonFile)
-
-    return 'Updated Successfully'
+    if updated:
+        # rewrite the whole JSON file with updated dictionary
+        with open("universities.json", "w") as jsonFile:
+            json.dump(jsonData, jsonFile)
+        return updated
+    else:
+        return updated
 
 # testing purpose
 if __name__=='__main__':

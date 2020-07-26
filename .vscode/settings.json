@@ -1,6 +1,6 @@
 {
     "code-runner.executorMap.python": "python3 -u",
-    "python.pythonPath": "searchEnv/bin/python",   // set path for python from the virtual environment
+    "python.pythonPath": "searchEnv/bin/python3.5",   // set path for python from the virtual environment
     "python.terminal.activateEnvironment": false,   // avoid activating environment automatically in terminal
     "python.autoComplete.extraPaths": ["/searchEnv", "/app/dataHelper"]
 }
