@@ -20,6 +20,14 @@ jsonFile.close()
 def get_all():
     return jsonData
 
+# index - filter
+def filter_all(code):
+    matches = []
+    for obj in jsonData:
+        if code == obj['alpha_two_code']:
+            matches.append(obj)
+    return matches
+
 # GET - Search
 def uni_details(search_key):
     matches = []

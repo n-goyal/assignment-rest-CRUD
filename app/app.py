@@ -12,24 +12,31 @@ def after_request(response):
     return response
 
 # get json data
-@app.route('/universities/<int:page>', methods=['GET'])
+@app.route('/universities/<string:code>/<int:page>', methods=['GET'])
 @cross_origin(origins='*')
-def index(page = 1):
-    universities = sorted(get_all(), key = lambda i: i['name'])  # returning JSON
-    # add pagination
-    offset = 50
-    start = (page - 1) * offset
-    end = start + offset
-    noPages = round(len(universities)/offset)
-    return jsonify({
-        "succcess": True,
-        "universities": universities[start:end],
-        "pages": noPages,
-        "totalUniversities": len(universities)
-    }), 200
+def index(page = 1, code=''):
+    if(code!=''):
+        universities = sorted(filter_all(code), key = lambda i: i['name']) # returning JSON
+    else:
+        universities = sorted(get_all(), key = lambda i: i['name'])  # returning JSON
+    if(len(universities)!=0):
+        # add pagination
+        offset = 10
+        start = (page - 1) * offset
+        end = start + offset
+        noPages = round(len(universities)/offset)
+        return jsonify({
+            "succcess": True,
+            "universities": universities[start:end],
+            "pages": noPages,
+            "page": page,
+            "totalUniversities": len(universities)
+        }), 200
+    else:
+        abort(404)
 
 # search university info: <key: Name>
-@app.route('/universities/<string:search_key>/<int:page>/get-details', methods=['GET'])
+@app.route('/universities/get-details/<string:search_key>/<int:page>', methods=['GET'])
 def get_university(search_key, page = 1):
     print(search_key)
     matches = uni_details(search_key)
@@ -39,14 +46,14 @@ def get_university(search_key, page = 1):
     else:
         # add pagination
         output = sorted(matches, key = lambda i: i['name'])  # returning JSON
-        offset = 20
+        offset = 10
         start = (page - 1) * offset
         end = start + offset
-        noPages = len(matches)/offset
+        noPages = round(len(matches)/offset)
         return jsonify({
             "success": True,
             "totalMatches": len(matches),
-            "Pages": noPages,
+            "pages": noPages,
             "matches": output[start:end],
             "message": "success"
         }), 200
