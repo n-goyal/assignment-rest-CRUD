@@ -13,8 +13,6 @@ def index():
         "universities": universities
     })
 
-    # return app
-
 # search university info
 @app.route('/search/<search_key>/get-details', methods=['GET'])
 def get_university(search_key):
